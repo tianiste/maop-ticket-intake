@@ -1,0 +1,391 @@
+:root {
+  --ink: #1d2b3a;
+  --ink-soft: #4d5b6a;
+  --ground: #e9edf1;
+  --surface: #ffffff;
+  --line: #c8d0d9;
+  --accent: #2350b8;
+  --ok: #1d6f47;
+  --ok-bg: #e3f2ea;
+  --missing: #9a4a06;
+  --missing-bg: #fdf0e1;
+  --unknown: #5a6472;
+  --unknown-bg: #eceef1;
+
+  --radius-control: 6px;
+  --radius-panel: 10px;
+
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--ground);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  margin: 0 0 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: 1.125rem;
+  margin: 0 0 0.75rem;
+}
+
+a {
+  color: var(--accent);
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Top bar */
+.topbar {
+  display: flex;
+  align-items: baseline;
+  gap: 2rem;
+  padding: 0.9rem clamp(1rem, 4vw, 2.5rem);
+  background: var(--ink);
+  color: #fff;
+}
+
+.brand {
+  font-weight: 700;
+}
+
+.topbar nav {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.topbar a {
+  color: #c9d4e3;
+  text-decoration: none;
+}
+
+.topbar a[aria-current="page"] {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 0.35em;
+}
+
+main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 2rem clamp(1rem, 4vw, 2.5rem) 4rem;
+}
+
+/* Form layout: the form, and beside it the check panel that stays in view. */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22rem;
+  gap: 2rem;
+  align-items: start;
+}
+
+.ticket {
+  background: var(--surface);
+  border-radius: var(--radius-panel);
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.departments {
+  border: 0;
+  padding: 0;
+  margin: 0 0 1.75rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.departments legend {
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+  padding: 0;
+}
+
+.department {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+
+.department input {
+  position: absolute;
+  opacity: 0;
+}
+
+.department:has(input:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.department.active {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.department-name {
+  font-weight: 700;
+}
+
+.department-hint {
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}
+
+.field {
+  margin-bottom: 1.25rem;
+}
+
+.field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+  margin-left: 0.35rem;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-control);
+  background: #fff;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+/* A field the check flagged: its question sits directly under it. */
+.field.flagged input,
+.field.flagged textarea {
+  border-color: var(--missing);
+}
+
+.question {
+  margin-top: 0.4rem;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--missing);
+  background: var(--missing-bg);
+  color: var(--missing);
+}
+
+.question p {
+  margin: 0;
+}
+
+.question p + p {
+  margin-top: 0.25rem;
+}
+
+/* Check panel */
+.check {
+  position: sticky;
+  top: 1rem;
+  background: var(--surface);
+  border-radius: var(--radius-panel);
+  padding: 1.25rem;
+}
+
+.status {
+  margin: 0 0 0.75rem;
+}
+
+.status-ok,
+.status-missing,
+.status-unknown {
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-control);
+}
+
+.status-ok {
+  color: var(--ok);
+  background: var(--ok-bg);
+}
+
+.status-missing {
+  color: var(--missing);
+  background: var(--missing-bg);
+}
+
+.status-unknown {
+  color: var(--unknown);
+  background: var(--unknown-bg);
+}
+
+.checklist,
+.missing-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.checklist li,
+.missing-list li {
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--ground);
+}
+
+.checklist span {
+  color: var(--ink-soft);
+  font-size: 0.875rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.button {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+
+.button-quiet {
+  background: #fff;
+  color: var(--accent);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.small {
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+  margin: 0.4rem 0;
+}
+
+.demo {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--ground);
+}
+
+.notice {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-control);
+  background: var(--unknown-bg);
+}
+
+.notice-error {
+  background: #fbe5e5;
+  color: #8a1c1c;
+}
+
+.lead {
+  max-width: 40rem;
+}
+
+/* Submitted */
+.done {
+  max-width: 44rem;
+  background: var(--surface);
+  border-radius: var(--radius-panel);
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.missing-list span {
+  color: var(--ink-soft);
+}
+
+/* Stats */
+.stats h2 {
+  margin-top: 2.5rem;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border-radius: var(--radius-panel);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+th,
+td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--ground);
+}
+
+thead th {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+tr.total th,
+tr.total td {
+  font-weight: 600;
+  border-top: 2px solid var(--line);
+}
+
+.verdict-popoln {
+  color: var(--ok);
+}
+
+.verdict-nepopoln {
+  color: var(--missing);
+}
+
+.verdict-ni-preverjen {
+  color: var(--unknown);
+}
+
+@media (max-width: 52rem) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .check {
+    position: static;
+  }
+}
+
+@media (max-width: 30rem) {
+  .departments {
+    grid-template-columns: 1fr;
+  }
+}
