@@ -52,5 +52,21 @@ Obravnavane alternative: obvezna polja v Jiri brez AI ter nov sistem za zahtevke
 ## Dokumenti
 
 - [`docs/MAOP_predstavitev_teme (1).pptx`](<docs/MAOP_predstavitev_teme (1).pptx>): predstavitev teme
+- [`docs/rules.md`](docs/rules.md): pravila za preverjanje zahtevkov
 - [`docs/decisions.md`](docs/decisions.md): odločitve
 - [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md): znane omejitve
+
+## Razvoj
+
+Preverjanje zahtevkov je Cloudflare Worker (`src/`), pravila so opisana v
+[`docs/rules.md`](docs/rules.md).
+
+```sh
+npm install
+npm run dev     # lokalno na http://localhost:8787, ključ GOOGLE_AI_API_KEY v .dev.vars ali .env
+npm run build   # preverjanje tipov in suhi build (brez objave)
+```
+
+```sh
+curl -s localhost:8787/validate -d '{"department":"engineering","fields":{"description":"Program mi ne dela."}}'
+```
