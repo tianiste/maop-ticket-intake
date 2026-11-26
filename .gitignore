@@ -2,3 +2,8 @@
 .env
 .dev.vars
 service-data/
+
+# Build output and dependencies
+node_modules/
+dist/
+.wrangler/

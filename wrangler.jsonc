@@ -1,0 +1,11 @@
+{
+  "name": "maop-ticket-intake",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-20",
+  "vars": {
+    "GEMINI_MODEL": "gemini-3.1-flash-lite",
+    "GEMINI_FALLBACK_MODEL": "gemini-flash-lite-latest"
+  }
+  // Secret GOOGLE_AI_API_KEY: locally in the git-ignored .env or .dev.vars,
+  // in production with `wrangler secret put GOOGLE_AI_API_KEY`.
+}
