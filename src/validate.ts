@@ -11,8 +11,11 @@ export interface Ticket {
 
 export interface Missing {
   rule: string;
+  /** Form field the item belongs to, so the form can show the question next to it. */
+  field: string;
   label: string;
   reason: string;
+  question: string;
   source: "form" | "ai";
 }
 
@@ -60,8 +63,10 @@ export function checkRequiredFields(ticket: Ticket): CodeCheck {
       emptyRequired.add(field.id);
       missing.push({
         rule: `field.${field.id}`,
+        field: field.id,
         label: field.label,
         reason: `Polje »${field.label}« je prazno.`,
+        question: field.question,
         source: "form",
       });
       questions.push(field.question);
@@ -89,7 +94,7 @@ export function buildUserPrompt(ticket: Ticket, rules: Rule[]): string {
   const ticketData = Object.fromEntries(dept.fields.map((f) => [f.label, ticket.fields[f.id] || "(prazno)"]));
   const ruleData = rules.map((r) => ({ id: r.id, pravilo: r.criterion }));
   return [
-    `Oddelek: ${dept.label}`,
+    `Oddelek: ${dept.label} (${dept.description})`,
     "",
     "Pravila:",
     JSON.stringify(ruleData, null, 2),
@@ -169,8 +174,9 @@ export function mergeResults(
   for (const verdict of ai.verdicts) {
     if (verdict.ok) continue;
     const rule = code.aiRules.find((r) => r.id === verdict.rule)!;
-    missing.push({ rule: rule.id, label: rule.label, reason: verdict.reason, source: "ai" });
-    questions.push(verdict.question.trim() || rule.question);
+    const question = verdict.question.trim() || rule.question;
+    missing.push({ rule: rule.id, field: rule.field, label: rule.label, reason: verdict.reason, question, source: "ai" });
+    questions.push(question);
   }
 
   return {

@@ -2,10 +2,26 @@
   "name": "maop-ticket-intake",
   "main": "src/index.ts",
   "compatibility_date": "2026-11-20",
+  "assets": {
+    "directory": "./web/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "maop-ticket-intake",
+      "migrations_dir": "migrations"
+    }
+  ],
   "vars": {
     "GEMINI_MODEL": "gemini-3.1-flash-lite",
-    "GEMINI_FALLBACK_MODEL": "gemini-flash-lite-latest"
+    "GEMINI_FALLBACK_MODEL": "gemini-flash-lite-latest",
+    "JIRA_ISSUE_TYPE": "Task"
   }
-  // Secret GOOGLE_AI_API_KEY: locally in the git-ignored .env or .dev.vars,
-  // in production with `wrangler secret put GOOGLE_AI_API_KEY`.
+  // Secrets, locally in the git-ignored .dev.vars or .env, in production via `wrangler secret put`:
+  //   GOOGLE_AI_API_KEY
+  //   JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN, JIRA_PROJECT_IT, JIRA_PROJECT_ENGINEERING
+  //   (all Jira values set = tickets go to Jira; otherwise demo mode, stored only in D1)
 }

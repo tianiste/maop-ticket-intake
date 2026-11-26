@@ -10,6 +10,8 @@ export interface Field {
   required: boolean;
   /** Asked when the field is required and empty. */
   question: string;
+  /** Shown as a larger text area in the form. */
+  multiline?: boolean;
 }
 
 export interface Rule {
@@ -25,18 +27,20 @@ export interface Rule {
 
 export interface DepartmentRules {
   label: string;
+  description: string;
   fields: Field[];
   rules: Rule[];
 }
 
 export const RULES: Record<Department, DepartmentRules> = {
   it: {
-    label: "IT (notranja podpora: računalniki, računi, omrežje, tiskalniki)",
+    label: "IT",
+    description: "notranja podpora: računalniki, računi, omrežje, tiskalniki",
     fields: [
       { id: "summary", label: "Kratek naslov", required: true, question: "V enem stavku: kaj je narobe?" },
       { id: "system", label: "Naprava ali storitev", required: true, question: "Katera naprava, program ali storitev ne deluje?" },
-      { id: "description", label: "Opis težave", required: true, question: "Opišite, kaj se zgodi, ko poskusite delati." },
-      { id: "errorMessage", label: "Sporočilo o napaki", required: false, question: "Ali se prikaže sporočilo o napaki? Če da, ga prepišite." },
+      { id: "description", label: "Opis težave", required: true, question: "Opišite, kaj se zgodi, ko poskusite delati.", multiline: true },
+      { id: "errorMessage", label: "Sporočilo o napaki", required: false, question: "Ali se prikaže sporočilo o napaki? Če da, ga prepišite.", multiline: true },
       { id: "since", label: "Od kdaj", required: false, question: "Od kdaj težava traja?" },
     ],
     rules: [
@@ -74,15 +78,16 @@ export const RULES: Record<Department, DepartmentRules> = {
     ],
   },
   engineering: {
-    label: "Inženiring (težave v programih, ki jih razvija MAOP)",
+    label: "Inženiring",
+    description: "težave v programih, ki jih razvija MAOP",
     fields: [
       { id: "summary", label: "Kratek naslov", required: true, question: "V enem stavku: kaj je narobe?" },
       { id: "program", label: "Program in verzija", required: true, question: "Kateri program in katera verzija?" },
       { id: "module", label: "Modul", required: false, question: "V katerem modulu se težava pojavi?" },
-      { id: "description", label: "Opis težave", required: true, question: "Opišite, kaj se zgodi." },
-      { id: "steps", label: "Koraki za ponovitev", required: false, question: "Po katerih korakih se težava ponovi?" },
-      { id: "errorMessage", label: "Sporočilo o napaki", required: false, question: "Ali se prikaže sporočilo o napaki? Če da, ga prepišite." },
-      { id: "expected", label: "Pričakovano delovanje", required: false, question: "Kaj bi se moralo zgoditi?" },
+      { id: "description", label: "Opis težave", required: true, question: "Opišite, kaj se zgodi.", multiline: true },
+      { id: "steps", label: "Koraki za ponovitev", required: false, question: "Po katerih korakih se težava ponovi?", multiline: true },
+      { id: "errorMessage", label: "Sporočilo o napaki", required: false, question: "Ali se prikaže sporočilo o napaki? Če da, ga prepišite.", multiline: true },
+      { id: "expected", label: "Pričakovano delovanje", required: false, question: "Kaj bi se moralo zgoditi?", multiline: true },
     ],
     rules: [
       {
