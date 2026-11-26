@@ -55,7 +55,17 @@ popolnih in pomanjkljivih zahtevkov, jih zamenjamo. Pravila so v kodi v `src/rul
 
 ## API
 
-`POST /validate`
+Obrazec uporablja:
+
+| Pot | Namen |
+|---|---|
+| `GET /api/rules` | polja po oddelkih in ali je Jira povezana |
+| `POST /api/validate` | preverjanje (spodaj) |
+| `POST /api/tickets` | oddaja: strežnik še enkrat preveri, shrani v D1 in ustvari zahtevek v Jiri (ali demo ključ) |
+| `GET /api/stats` | statistika in zadnji zahtevki |
+| `POST /api/stats/sync` | prebere čase nastanka in rešitve iz Jire (do 50 zahtevkov naenkrat) |
+
+`POST /api/validate`
 
 ```json
 {
@@ -76,12 +86,28 @@ Odgovor:
   "valid": false,
   "department": "engineering",
   "missing": [
-    { "rule": "eng.error", "label": "Sporočilo o napaki", "reason": "...", "source": "ai" }
+    {
+      "rule": "eng.error",
+      "field": "errorMessage",
+      "label": "Sporočilo o napaki",
+      "reason": "...",
+      "question": "Ali se prikaže sporočilo o napaki? ...",
+      "source": "ai"
+    }
   ],
   "questions": ["Ali se prikaže sporočilo o napaki? ..."],
   "ai": { "checked": true, "model": "gemini-3.1-flash-lite" }
 }
 ```
 
-`source` je `form` (prazno obvezno polje, preverila koda) ali `ai`. Neznana polja se zavržejo,
+`field` pove, pri katerem polju obrazec izpiše vprašanje. `source` je `form` (prazno obvezno polje, preverila koda) ali `ai`. Neznana polja se zavržejo,
 vsako polje je skrajšano na 5000 znakov.
+
+## Oddaja in merjenje
+
+- Zahtevek je mogoče oddati tudi nepopoln. Obrazec pred oddajo in po njej izpiše, kaj manjka;
+  zahtevek v Jiri dobi seznam manjkajočega in oznako `nepopoln` (ali `nepreverjen`, če AI ni
+  odgovoril). Oznake: `maop-intake`, `oddelek-it` / `oddelek-engineering`.
+- V D1 se shrani: oddelek, naslov in polja, število preverjanj pred oddajo, rezultat prvega
+  preverjanja (če ga ni bilo, rezultat ob oddaji), rezultat ob oddaji, kaj je manjkalo, Jira ključ.
+- Čas obravnave = od nastanka do rešitve zahtevka v Jiri. Demo zahtevki ga nimajo (»ni podatka«).

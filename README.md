@@ -58,15 +58,25 @@ Obravnavane alternative: obvezna polja v Jiri brez AI ter nov sistem za zahtevke
 
 ## Razvoj
 
-Preverjanje zahtevkov je Cloudflare Worker (`src/`), pravila so opisana v
-[`docs/rules.md`](docs/rules.md).
+Cloudflare Worker (`src/`) streže obrazec v Vue (`web/`) in API (`/api/*`). Zahtevki se shranijo
+v D1 (`migrations/`). Pravila in API so opisani v [`docs/rules.md`](docs/rules.md).
 
 ```sh
 npm install
-npm run dev     # lokalno na http://localhost:8787, ključ GOOGLE_AI_API_KEY v .dev.vars ali .env
-npm run build   # preverjanje tipov in suhi build (brez objave)
+npm run dev       # zgradi obrazec, pripravi lokalno D1 in zažene vse na http://localhost:8787
+npm run build     # preverjanje tipov, build obrazca in suhi build Workerja (brez objave)
 ```
 
-```sh
-curl -s localhost:8787/validate -d '{"department":"engineering","fields":{"description":"Program mi ne dela."}}'
-```
+Za sprotno urejanje obrazca: `npm run dev:api` in v drugem terminalu `npm run dev:web`
+(Vite na http://localhost:5173, `/api` gre na Worker).
+
+Nastavitve (lokalno v `.dev.vars` ali `.env`, ki nista v gitu):
+
+| Spremenljivka | Namen |
+|---|---|
+| `GOOGLE_AI_API_KEY` | ključ za Gemini; brez njega je rezultat preverjanja »neznano« |
+| `JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN` | Jira Cloud (npr. `https://podjetje.atlassian.net`) |
+| `JIRA_PROJECT_IT`, `JIRA_PROJECT_ENGINEERING` | ključ projekta v Jiri za vsak oddelek |
+
+Dokler katera od nastavitev za Jiro manjka, aplikacija dela v demo načinu: zahtevki dobijo ključ
+`DEMO-n` in se shranijo samo v D1.
