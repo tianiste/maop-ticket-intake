@@ -2,8 +2,3 @@
 .env
 .dev.vars
 service-data/
-
-# Local agent working notes (never committed)
-AGENTS.md
-CLAUDE.md
-PROGRESS.md
