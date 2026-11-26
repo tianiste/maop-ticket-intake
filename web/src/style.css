@@ -118,6 +118,7 @@ main {
 
 .department {
   display: grid;
+  align-content: start;
   gap: 0.2rem;
   padding: 0.85rem 1rem;
   border: 1px solid var(--line);
