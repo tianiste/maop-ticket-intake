@@ -1,0 +1,40 @@
+modules:
+  jira:uiModifications:
+    - key: intake-checks
+      title: MAOP ticket intake checks
+      resource: uim
+      resolver:
+        function: uim-resolver
+  jira:adminPage:
+    - key: intake-admin
+      title: MAOP ticket intake
+      resource: admin
+      render: native
+      resolver:
+        function: admin-resolver
+  function:
+    - key: uim-resolver
+      handler: uim.handler
+    - key: admin-resolver
+      handler: admin.handler
+resources:
+  - key: uim
+    path: static/uim/dist
+  - key: admin
+    path: src/frontend/admin.tsx
+permissions:
+  scopes:
+    - read:jira-user
+    - read:jira-work
+    - write:jira-work
+    - manage:jira-configuration
+    - manage:jira-project
+  external:
+    fetch:
+      backend:
+        - "*.trycloudflare.com"
+        - "*.workers.dev"
+app:
+  runtime:
+    name: nodejs24.x
+  id: ari:cloud:ecosystem::app/replace-with-forge-register
