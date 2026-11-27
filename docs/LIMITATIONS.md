@@ -9,7 +9,7 @@ limitation when it is found; remove it when it is fixed.
 | No live AI check done yet | Quality of AI verdicts on these rules is unknown | Owner runs live checks with the real key | 2026-11-26 |
 | Free-tier Gemini | Prompts may be used by Google; occasional `503`; result is then `valid: null` | Use made-up tickets until the client agrees | 2026-11-26 |
 | No access protection | Anyone with the URL can submit, see stats and recent ticket titles, and use the AI quota | Needs Cloudflare Access (or similar) at deploy, owner's choice | 2026-11-26 |
-| Jira not connected | Tickets get `DEMO-n` keys and stay in D1; no handling time | No test Jira yet; Jira client is untested against a real instance | 2026-11-26 |
+| Only tested against Jira Cloud (team-managed) | Behaviour on MAOP's own Jira (company-managed or Data Center) is unknown | Need to know which Jira MAOP uses | 2026-11-27 |
 | Jira times are synced by hand | Handling time updates only when "Osveži čase iz Jire" is pressed (50 tickets per press) | No scheduled job yet | 2026-11-26 |
 | First-check result and check count come from the browser | A modified client could report wrong values; the final verdict is re-checked on the server | Kept simple for an internal tool | 2026-11-26 |
 | Full ticket fields are stored in D1 | Ticket text stays in the database with no retention limit | Needed to review examples later; agree retention with MAOP | 2026-11-26 |

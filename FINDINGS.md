@@ -1,5 +1,22 @@
 # Findings
 
+## 2026-11-27: Live check against Jira Cloud and Gemini
+
+Test site: Jira Cloud Free, two team-managed Kanban spaces (`IP` IT Podpora, `IN` Inženiring),
+classic API token. Made-up test tickets, submitted through the local Worker (`wrangler dev`).
+
+| Check | Result |
+|---|---|
+| Login (`/rest/api/3/myself`) | 200 |
+| Project keys | Jira picked `IP` and `IN` itself, not the typed `IT`/`ENG`; check keys after creating spaces |
+| Issue types | `Epic`, `Story`, `Bug`, `Task`; `Task` used |
+| AI check, "Program mi ne dela." (engineering) | `valid:false`, 5 sensible items and questions in Slovenian, 1.6 s, `gemini-3.1-flash-lite` |
+| AI check, complete IT ticket | `valid:true`, 6.0 s |
+| Create issue | `IN-1`, `IP-1` created in the right project; ADF description, fields, "Preverjanje popolnosti" section and labels (`maop-intake`, `oddelek-*`, `nepopoln`) correct |
+| Resolution date | Moving to Done in a team-managed space sets `resolution` and `resolutiondate`; sync read it and stats showed the handling time |
+
+Notes: in the newer Jira UI "projects" are called "spaces"; the API still says `project`.
+
 ## 2026-11-26: Which Gemini model to use for the completeness check
 
 **Recommendation:** `gemini-3.1-flash-lite`, with `gemini-flash-lite-latest` as the fallback.
