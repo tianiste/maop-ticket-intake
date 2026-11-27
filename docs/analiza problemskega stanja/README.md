@@ -1,0 +1,44 @@
+# Analiza problemskega stanja
+
+Slika analize problemskega stanja za problem podjetja MAOP: vzroki in posledice predolgega časa
+obravnave zahtevkov.
+
+![Analiza problemskega stanja](analiza-problemskega-stanja.png)
+
+Datoteke:
+
+- [`analiza-problemskega-stanja.svg`](analiza-problemskega-stanja.svg): izvorna slika
+- [`analiza-problemskega-stanja.png`](analiza-problemskega-stanja.png): slika za Word (2800 × 1600 px)
+- [`generiraj.py`](generiraj.py): ustvari SVG (besedila krogov in puščice so na vrhu datoteke);
+  `python3 generiraj.py analiza-problemskega-stanja.svg`
+
+Usmeritve: `docs/analiza_problemskega_stanja.pdf`. Uporabljena sta samo krog in ravna puščica;
+izhodiščni problem je v sredini, vzroki in vzroki vzrokov levo, posledice in posledice posledic
+desno; vsi krogi so enako veliki, puščice tečejo od leve proti desni.
+
+## Izhodiščni problem
+
+**Predolg čas obravnave zahtevkov.** Razlika med obstoječim stanjem (zahtevki prispejo nepopolni,
+sledi dodatno spraševanje in čakanje) in želenim stanjem (zahtevek je ob oddaji popoln in takoj v
+pravem oddelku).
+
+## Vzroki
+
+| Vzrok vzroka | Vzrok | Neposredni vzrok problema |
+|---|---|---|
+| Ni strukturiranega obrazca za prijavo; ni preverjanja popolnosti ob oddaji; oddajnik ne ve, katere podatke oddelek potrebuje | Zahtevki prispejo s premalo informacijami | Prejemnik mora dodatno spraševati; čakanje na odgovor oddajnika |
+| Oddajnik ne ve, katere podatke oddelek potrebuje; ni jasnega pravila, kateri oddelek je pristojen | Zahtevek ni takoj v pravem oddelku | Prestavljanje med IT in inženiringom |
+
+## Posledice
+
+| Posledica | Posledica posledice |
+|---|---|
+| Reševanje se začne pozneje | Kupci dlje čakajo na rešitev → slabše zadovoljstvo kupcev |
+| Izgubljen delovni čas oddajnika in reševalca | Višji stroški podpore; manj časa za razvoj in uvajanje → slabša konkurenčnost podjetja |
+| Nezadovoljstvo in frustracija zaposlenih | Višji stroški podpore |
+
+Vzroki in neposredne posledice izhajajo iz predstavitve teme (problem, potek v petih korakih,
+cilji). Posledice posledic (kupci, stroški, konkurenčnost) so ocena avtorjev in jih potrdimo z
+naročnikom.
+
+Povezana slika: [obogatena slika problema](<../obogatena slika/README.md>).
