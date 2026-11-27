@@ -49,6 +49,7 @@ export interface GroupStats {
   firstCheck: VerdictCounts;
   final: VerdictCounts;
   averageChecks: number | null;
+  fromJiraApp: number;
   handling: { resolved: number; unresolved: number; demo: number; medianHours: number | null; averageHours: number | null };
 }
 
@@ -61,13 +62,14 @@ export interface StatsResponse {
     createdAt: string;
     department: Department;
     summary: string;
-    checks: number;
+    checks: number | null;
     firstValid: boolean | null;
     finalValid: boolean | null;
     missing: string[];
     jiraMode: "jira" | "demo";
     jiraKey: string | null;
     resolvedAt: string | null;
+    source: "form" | "jira";
   }[];
   jira: "jira" | "demo";
 }

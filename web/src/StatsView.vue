@@ -74,7 +74,10 @@ function groups(d: StatsResponse): [string, GroupStats][] {
             <tbody>
               <tr v-for="[name, g] in groups(data)" :key="name" :class="{ total: name === 'Skupaj' }">
                 <th scope="row">{{ name }}</th>
-                <td>{{ g.submissions }}</td>
+                <td>
+                  {{ g.submissions }}
+                  <span v-if="g.fromJiraApp" class="small">, od tega {{ g.fromJiraApp }} iz Jire</span>
+                </td>
                 <td>
                   {{ formatShare(g.firstCheck.valid, known(g.firstCheck)) }}
                   <span v-if="g.firstCheck.unknown" class="small">, {{ g.firstCheck.unknown }} nepreverjenih</span>
@@ -94,7 +97,8 @@ function groups(d: StatsResponse): [string, GroupStats][] {
         </div>
 
         <p class="small">
-          Deleži upoštevajo le preverjene zahtevke. Čas obravnave je čas od nastanka do rešitve v Jiri;
+          Deleži upoštevajo le preverjene zahtevke. Prvo preverjanje in število preverjanj sta znana le
+          za zahtevke iz obrazca; za zahtevke, ustvarjene v Jiri, ju ni. Čas obravnave je čas od nastanka do rešitve v Jiri;
           <template v-if="data.jira === 'demo'">
             Jira še ni povezana, zato časa obravnave ni ({{ data.total.handling.demo }} demo zahtevkov).
           </template>
@@ -130,7 +134,9 @@ function groups(d: StatsResponse): [string, GroupStats][] {
                 <td>{{ formatDate(r.createdAt) }}</td>
                 <td>{{ r.department === "it" ? "IT" : "Inženiring" }}</td>
                 <td>{{ r.summary }}</td>
-                <td>{{ r.checks === 0 ? "oddan brez preverjanja" : verdictText(r.firstValid) }}</td>
+                <td>
+                  {{ r.checks === null ? "ni podatka (ustvarjen v Jiri)" : r.checks === 0 ? "oddan brez preverjanja" : verdictText(r.firstValid) }}
+                </td>
                 <td :class="`verdict-${verdictText(r.finalValid).replace(' ', '-')}`">{{ verdictText(r.finalValid) }}</td>
                 <td>{{ r.missing.join(", ") || "nič" }}</td>
               </tr>
