@@ -7,10 +7,11 @@ obravnave zahtevkov.
 
 Datoteke:
 
-- [`analiza-problemskega-stanja.svg`](analiza-problemskega-stanja.svg): izvorna slika
-- [`analiza-problemskega-stanja.png`](analiza-problemskega-stanja.png): slika za Word (2800 × 1600 px)
-- [`generiraj.py`](generiraj.py): ustvari SVG (besedila krogov in puščice so na vrhu datoteke);
-  `python3 generiraj.py analiza-problemskega-stanja.svg`
+- [`analiza-problemskega-stanja.drawio`](analiza-problemskega-stanja.drawio): izvorna slika;
+  odpri v <https://app.diagrams.net/> (File → Open from → Device). Narisana je v ročnem slogu
+  (sketch) s pisavo Patrick Hand.
+- [`analiza-problemskega-stanja.png`](analiza-problemskega-stanja.png): slika za Word. Po
+  spremembi jo ponovno izvozi v diagrams.net: File → Export as → PNG (zoom 200 %).
 
 Usmeritve: `docs/analiza_problemskega_stanja.pdf`. Uporabljena sta samo krog in ravna puščica;
 izhodiščni problem je v sredini, vzroki in vzroki vzrokov levo, posledice in posledice posledic

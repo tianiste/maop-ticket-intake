@@ -6,8 +6,10 @@ Poglavje 2.2 seminarske naloge: obogatena slika (rich picture) obravnave zahtevk
 
 Datoteke:
 
-- [`obogatena-slika.svg`](obogatena-slika.svg): izvorna slika (vektorska, urejanje v brskalniku, Inkscape ali Visio)
-- [`obogatena-slika.png`](obogatena-slika.png): slika za vstavljanje v Word (3200 × 2120 px)
+- [`obogatena-slika.drawio`](obogatena-slika.drawio): izvorna slika; odpri v <https://app.diagrams.net/>
+  (File → Open from → Device). Narisana je v ročnem slogu (sketch) s pisavo Patrick Hand.
+- [`obogatena-slika.png`](obogatena-slika.png): slika za vstavljanje v Word. Po spremembi jo
+  ponovno izvozi v diagrams.net: File → Export as → PNG (zoom 200 %).
 
 Usmeritve: V. Pham, *Rich Pictures and CATWOE: Simple yet Powerful Scope-Modelling Techniques*,
 Elabor8, 11. 8. 2014,
