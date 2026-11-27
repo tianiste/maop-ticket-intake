@@ -14,3 +14,9 @@ limitation when it is found; remove it when it is fixed.
 | First-check result and check count come from the browser | A modified client could report wrong values; the final verdict is re-checked on the server | Kept simple for an internal tool | 2026-11-26 |
 | Full ticket fields are stored in D1 | Ticket text stays in the database with no retention limit | Needed to review examples later; agree retention with MAOP | 2026-11-26 |
 | Remote D1 database does not exist yet | Deploy would fail until the owner creates it | Creating it changes the Cloudflare account (owner) | 2026-11-26 |
+| Jira app: Create can't be blocked | Incomplete tickets can still be created from the Jira dialog | UI modifications have no submit hook | 2026-11-27 |
+| Jira app: field help text hidden | Per-field questions show only behind the ⓘ icon; the full list is in the `Preverjanje` field | Jira's Create dialog layout | 2026-11-27 |
+| Jira app: fields found by name | Renaming a field or adding one needs **Shrani** on the admin page again; until then it is reported as missing | Field ids must be registered before the dialog code runs | 2026-11-27 |
+| Jira app: AI check only on leaving Description | Edits to other fields after that show code checks only, until Description is left again | Owner's choice, limits Gemini calls | 2026-11-27 |
+| Jira app: Jira Cloud only | A Data Center Jira would need a rewrite | Forge runs only on Cloud | 2026-11-27 |
+| Jira app: no re-check after create yet | Label `nepopoln`, comment and D1 stats are not written for tickets from the Jira dialog | Next increment (issue-created trigger) | 2026-11-27 |
