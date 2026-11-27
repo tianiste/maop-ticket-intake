@@ -1,7 +1,7 @@
 # Analiza problemskega stanja
 
 Slika analize problemskega stanja za problem podjetja MAOP: vzroki in posledice predolgega časa
-obravnave zahtevkov.
+obravnave zunanjih zahtevkov (zahtevek odda stranka).
 
 ![Analiza problemskega stanja](analiza-problemskega-stanja.png)
 
@@ -29,19 +29,19 @@ pravem oddelku).
 
 | Vzrok vzroka | Vzrok | Neposredni vzrok problema |
 |---|---|---|
-| Ni strukturiranega obrazca za prijavo; ni preverjanja popolnosti ob oddaji; oddajnik ne ve, katere podatke oddelek potrebuje | Zahtevki prispejo s premalo informacijami | Prejemnik mora dodatno spraševati; čakanje na odgovor oddajnika |
-| Oddajnik ne ve, katere podatke oddelek potrebuje; ni jasnega pravila, kateri oddelek je pristojen | Zahtevek ni takoj v pravem oddelku | Prestavljanje med IT in inženiringom |
+| Ni strukturiranega obrazca za prijavo; ni preverjanja popolnosti ob oddaji; stranka ne ve, katere podatke oddelek potrebuje | Zahtevki prispejo s premalo informacijami | Prejemnik mora stranko dodatno spraševati; čakanje na odgovor stranke |
+| Stranka ne ve, katere podatke oddelek potrebuje; ni jasnega pravila, kateri oddelek je pristojen | Zahtevek ni takoj v pravem oddelku | Prestavljanje med IT in inženiringom |
 
 ## Posledice
 
 | Posledica | Posledica posledice |
 |---|---|
-| Reševanje se začne pozneje | Kupci dlje čakajo na rešitev → slabše zadovoljstvo kupcev |
-| Izgubljen delovni čas oddajnika in reševalca | Višji stroški podpore; manj časa za razvoj in uvajanje → slabša konkurenčnost podjetja |
-| Nezadovoljstvo in frustracija zaposlenih | Višji stroški podpore |
+| Reševanje se začne pozneje | Stranke dlje čakajo na rešitev → slabše zadovoljstvo strank |
+| Izgubljen čas stranke in reševalca | Višji stroški podpore; manj časa za razvoj in uvajanje → slabša konkurenčnost podjetja |
+| Nezadovoljstvo strank in zaposlenih | Višji stroški podpore |
 
 Vzroki in neposredne posledice izhajajo iz predstavitve teme (problem, potek v petih korakih,
-cilji). Posledice posledic (kupci, stroški, konkurenčnost) so ocena avtorjev in jih potrdimo z
+cilji). Posledice posledic (stranke, stroški, konkurenčnost) so ocena avtorjev in jih potrdimo z
 naročnikom.
 
 Povezana slika: [obogatena slika problema](<../obogatena slika/README.md>).
