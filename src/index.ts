@@ -4,6 +4,7 @@ import { runValidation } from "./check";
 import { deleteSubmission, insertSubmission, setJiraKey, setJiraTimes, stats, unresolvedJiraKeys } from "./db";
 import type { Env } from "./env";
 import { createIssue, fetchIssueTimes, jiraConfig } from "./jira";
+import { handleJiraApp } from "./jiraApp";
 import { isDepartment, RULES } from "./rules";
 import { normalizeFields, type Ticket } from "./validate";
 
@@ -128,6 +129,7 @@ export default {
         return syncJira(env);
     }
 
+    if (pathname.startsWith("/api/jira/")) return handleJiraApp(request, env, route, json);
     if (pathname.startsWith("/api/")) return json({ error: "Not found." }, 404);
     return env.ASSETS.fetch(request);
   },

@@ -10,4 +10,6 @@ export interface Env {
   JIRA_PROJECT_IT?: string;
   JIRA_PROJECT_ENGINEERING?: string;
   JIRA_ISSUE_TYPE?: string;
+  /** Shared secret for the Forge Jira app (X-Intake-Secret header). */
+  JIRA_APP_SECRET?: string;
 }

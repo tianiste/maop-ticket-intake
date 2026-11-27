@@ -24,4 +24,5 @@
   //   GOOGLE_AI_API_KEY
   //   JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN, JIRA_PROJECT_IT, JIRA_PROJECT_ENGINEERING
   //   (all Jira values set = tickets go to Jira; otherwise demo mode, stored only in D1)
+  //   JIRA_APP_SECRET (shared with the Forge app as WORKER_SECRET; /api/jira/* stays closed without it)
 }
