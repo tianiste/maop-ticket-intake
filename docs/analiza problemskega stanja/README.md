@@ -12,6 +12,8 @@ Datoteke:
   (sketch) s pisavo Patrick Hand.
 - [`analiza-problemskega-stanja.png`](analiza-problemskega-stanja.png): slika za Word. Po
   spremembi jo ponovno izvozi v diagrams.net: File → Export as → PNG (zoom 200 %).
+- [`prejšnja verzija/`](<prejšnja verzija/>): prva, čista verzija (SVG, PNG in skripta
+  `generiraj.py`, ki ustvari SVG: `python3 generiraj.py analiza-problemskega-stanja.svg`).
 
 Usmeritve: `docs/analiza_problemskega_stanja.pdf`. Uporabljena sta samo krog in ravna puščica;
 izhodiščni problem je v sredini, vzroki in vzroki vzrokov levo, posledice in posledice posledic

@@ -10,6 +10,7 @@ Datoteke:
   (File → Open from → Device). Narisana je v ročnem slogu (sketch) s pisavo Patrick Hand.
 - [`obogatena-slika.png`](obogatena-slika.png): slika za vstavljanje v Word. Po spremembi jo
   ponovno izvozi v diagrams.net: File → Export as → PNG (zoom 200 %).
+- [`prejšnja verzija/`](<prejšnja verzija/>): prva, čista verzija (SVG in PNG), narisana brez ročnega sloga.
 
 Usmeritve: V. Pham, *Rich Pictures and CATWOE: Simple yet Powerful Scope-Modelling Techniques*,
 Elabor8, 11. 8. 2014,
