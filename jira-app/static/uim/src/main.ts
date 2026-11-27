@@ -28,6 +28,8 @@ interface Setup {
   descriptionLabel: string;
 }
 
+const log = (stage: string, detail?: unknown) => void call("log", { stage, detail }).catch(() => undefined);
+
 let rules: Promise<WorkerResult<JiraRules>> | null = null;
 const loadRules = () => (rules ??= call<WorkerResult<JiraRules>>("getRules"));
 
@@ -92,7 +94,7 @@ function summarize(result: CheckResult, setup: Setup, aiRequested: boolean): str
   if (result.valid === true) lines.push("Zahtevek je popoln.");
   else if (result.valid === false) {
     lines.push("Zahtevek ni popoln. Dopolnite:");
-    for (const item of result.missing) lines.push(`• ${item.label}: ${item.question}`);
+    for (const item of result.missing) lines.push(`${BULLET}${item.label}: ${item.question}`);
   } else if (aiRequested) {
     lines.push("Vsebine ni bilo mogoče preveriti (preverjanje z AI ni na voljo). Zahtevek lahko vseeno oddate.");
   } else {
@@ -107,9 +109,29 @@ function summarize(result: CheckResult, setup: Setup, aiRequested: boolean): str
   return lines.join("\n");
 }
 
+const BULLET = "• ";
+
+/** Atlassian document for a paragraph field: "• " lines become a bullet list, others paragraphs.
+ * The rich-text editor in the create dialog rejects plain strings. */
+function toAdf(text: string) {
+  const content: object[] = [];
+  let list: object[] | null = null;
+  for (const line of text.split("\n")) {
+    const paragraph = (value: string) => ({ type: "paragraph", content: [{ type: "text", text: value }] });
+    if (line.startsWith(BULLET)) {
+      if (!list) content.push({ type: "bulletList", content: (list = []) });
+      list.push({ type: "listItem", content: [paragraph(line.slice(BULLET.length))] });
+    } else {
+      list = null;
+      if (line) content.push(paragraph(line));
+    }
+  }
+  return { version: 1 as const, type: "doc" as const, content };
+}
+
 function show(api: HookApi, setup: Setup, text: string): void {
   if (!setup.checkFieldId) return;
-  api.getFieldById(setup.checkFieldId)?.setValue(text);
+  api.getFieldById(setup.checkFieldId)?.setValue(toAdf(text));
 }
 
 async function check(api: HookApi, setup: Setup, ai: boolean): Promise<void> {
@@ -118,7 +140,9 @@ async function check(api: HookApi, setup: Setup, ai: boolean): Promise<void> {
     fields: readFields(api, setup),
     ai,
   });
-  show(api, setup, result.ok ? summarize(result.data, setup, ai) : `Preverjanje ni na voljo: ${result.error}`);
+  const text = result.ok ? summarize(result.data, setup, ai) : `Preverjanje ni na voljo: ${result.error}`;
+  log(ai ? "check+ai" : "check", text);
+  show(api, setup, text);
 }
 
 let current: Promise<Setup | string | null> | null = null;
@@ -127,6 +151,10 @@ uiModificationsApi.onInit(
   async ({ api, uiModifications }) => {
     current = setUp(uiModifications);
     const setup = await current;
+    log("init", setup === null || typeof setup === "string" ? setup : {
+      department: setup.department, jiraIds: setup.jiraIds, checkFieldId: setup.checkFieldId,
+      absent: setup.absent.map((f) => f.id), registered: registeredIds(uiModifications),
+    });
     if (setup === null) return;
     if (typeof setup === "string") {
       api.getFieldById("summary")?.setDescription(`Preverjanje ni na voljo: ${setup}`);
@@ -158,4 +186,5 @@ uiModificationsApi.onChange(
 
 uiModificationsApi.onError(({ errors }) => {
   console.error("intake checks", errors);
+  log("error", errors);
 });

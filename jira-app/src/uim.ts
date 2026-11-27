@@ -8,6 +8,12 @@ const MAX_FIELD_LENGTH = 5000;
 
 const resolver = new Resolver();
 
+// Diagnostics from the create dialog (its console is not visible in forge logs).
+resolver.define("log", ({ payload }: { payload: { stage: string; detail?: unknown } }) => {
+  console.log(`[uim] ${String(payload.stage).slice(0, 100)}`, JSON.stringify(payload.detail ?? null).slice(0, 2000));
+  return null;
+});
+
 resolver.define("getRules", () => callWorker<JiraRules>("/api/jira/rules"));
 
 resolver.define(
