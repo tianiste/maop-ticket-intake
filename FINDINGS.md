@@ -1,5 +1,22 @@
 # Findings
 
+## 2026-11-27: Forge spike in the Jira Create dialog
+
+Forge app `jira-app/` (spike), deployed to the development environment and installed on the
+Jira Cloud test site. Forge CLI 16.0.0 on Node 24.
+
+| Check | Result |
+|---|---|
+| Admin page (Jira settings -> Apps) | Lists spaces with issue types; saving registered 8 contexts (IP, IN x Epic/Story/Bug/Task) through the UI modifications REST API |
+| Create dialog -> Forge backend (`invoke` from UI modifications) | Works: Summary help text showed the backend's answer ("WORKER_URL ni nastavljen", expected without a Worker) |
+| Where help text appears | Not under the field: behind an ⓘ icon next to the label, visible only on hover or click |
+| Forge -> Worker | Not checked yet (no tunnel / WORKER_URL) |
+
+Notes: `forge register` needs a Developer Space, created by the owner interactively (the CLI
+forces non-interactive mode when run by an agent). Forge bundles TypeScript with the app's
+`tsconfig.json`, so it must not set `noEmit`. An empty pop-up at the bottom left of Jira appeared
+during the check; cause unknown.
+
 ## 2026-11-27: Live check against Jira Cloud and Gemini
 
 Test site: Jira Cloud Free, two team-managed Kanban spaces (`IP` IT Podpora, `IN` Inženiring),
