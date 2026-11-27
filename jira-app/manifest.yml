@@ -12,7 +12,14 @@ modules:
       render: native
       resolver:
         function: admin-resolver
+  trigger:
+    - key: issue-created
+      function: issue-created-fn
+      events:
+        - avi:jira:created:issue
   function:
+    - key: issue-created-fn
+      handler: created.handler
     - key: uim-resolver
       handler: uim.handler
     - key: admin-resolver

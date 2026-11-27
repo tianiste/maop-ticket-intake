@@ -6,7 +6,11 @@ import { view } from "@forge/bridge";
 import { uiModificationsApi, type HookApi, type UiModification } from "@forge/jira-bridge";
 import { call } from "../../../src/frontend/call";
 import {
+  BULLET,
+  BUILT_IN,
   CHECK_FIELD_NAME,
+  plain,
+  toAdf,
   contextKey,
   parseUimData,
   type CheckResult,
@@ -14,9 +18,6 @@ import {
   type RuleField,
   type WorkerResult,
 } from "../../../src/shared";
-
-/** Rule fields that are Jira's own fields; the rest are custom fields found by label. */
-const BUILT_IN: Record<string, string> = { summary: "summary", description: "description" };
 
 interface Setup {
   department: string;
@@ -71,17 +72,6 @@ async function setUp(uiModifications: UiModification[]): Promise<Setup | string 
     dept.fields.filter((f) => (f.id === "description" || f.multiline) && jiraIds[f.id]).map((f) => jiraIds[f.id]),
   );
   return { department, ruleFields: dept.fields, jiraIds, absent, checkFieldId: names[CHECK_FIELD_NAME], aiTriggerIds };
-}
-
-/** Plain text from a string or an Atlassian document (description and paragraph fields). */
-function plain(value: unknown): string {
-  if (typeof value === "string") return value;
-  if (!value || typeof value !== "object") return "";
-  const node = value as { type?: string; text?: string; content?: unknown[] };
-  if (node.type === "text") return node.text ?? "";
-  const parts = (node.content ?? []).map(plain);
-  const block = node.type === "doc" || node.type === "bulletList" || node.type === "orderedList";
-  return parts.join(block ? "\n" : "");
 }
 
 function readFields(api: HookApi, setup: Setup): Record<string, string> {
@@ -147,26 +137,6 @@ function summarize(api: HookApi, setup: Setup, result: CheckResult, aiFailed: bo
     lines.push(`Polj ni v tem oknu (obvestite skrbnika): ${setup.absent.map((f) => f.label).join(", ")}.`);
   }
   return lines.join("\n");
-}
-
-const BULLET = "• ";
-
-/** Atlassian document for a paragraph field: "• " lines become a bullet list, others paragraphs.
- * The rich-text editor in the create dialog rejects plain strings. */
-function toAdf(text: string) {
-  const content: object[] = [];
-  let list: object[] | null = null;
-  for (const line of text.split("\n")) {
-    const paragraph = (value: string) => ({ type: "paragraph", content: [{ type: "text", text: value }] });
-    if (line.startsWith(BULLET)) {
-      if (!list) content.push({ type: "bulletList", content: (list = []) });
-      list.push({ type: "listItem", content: [paragraph(line.slice(BULLET.length))] });
-    } else {
-      list = null;
-      if (line) content.push(paragraph(line));
-    }
-  }
-  return { version: 1 as const, type: "doc" as const, content };
 }
 
 function show(api: HookApi, setup: Setup, text: string): void {

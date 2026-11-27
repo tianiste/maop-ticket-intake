@@ -43,3 +43,37 @@ export interface CheckResult {
 }
 
 export type WorkerResult<T> = { ok: true; data: T } | { ok: false; error: string };
+
+export const BULLET = "• ";
+
+/** Plain text from a string or an Atlassian document (description and paragraph fields). */
+export function plain(value: unknown): string {
+  if (typeof value === "string") return value;
+  if (!value || typeof value !== "object") return "";
+  const node = value as { type?: string; text?: string; content?: unknown[] };
+  if (node.type === "text") return node.text ?? "";
+  const parts = (node.content ?? []).map(plain);
+  const block = node.type === "doc" || node.type === "bulletList" || node.type === "orderedList";
+  return parts.join(block ? "\n" : "");
+}
+
+/** Atlassian document from text: "• " lines become a bullet list, other lines paragraphs.
+ * Paragraph fields with the rich-text editor reject plain strings. */
+export function toAdf(text: string) {
+  const paragraph = (value: string) => ({ type: "paragraph", content: [{ type: "text", text: value }] });
+  const content: object[] = [];
+  let list: object[] | null = null;
+  for (const line of text.split("\n")) {
+    if (line.startsWith(BULLET)) {
+      if (!list) content.push({ type: "bulletList", content: (list = []) });
+      list.push({ type: "listItem", content: [paragraph(line.slice(BULLET.length))] });
+    } else {
+      list = null;
+      if (line) content.push(paragraph(line));
+    }
+  }
+  return { version: 1 as const, type: "doc" as const, content };
+}
+
+/** Rule fields that are Jira's own fields; the rest are custom fields found by label. */
+export const BUILT_IN: Record<string, string> = { summary: "summary", description: "description" };

@@ -1,11 +1,10 @@
 // Backend for the admin page: chooses the projects and issue types whose create dialog runs
 // the intake checks. A UI modification only renders for contexts registered through the
 // UI modifications REST API, which only this app can call (asApp).
-import api, { route } from "@forge/api";
+import { route } from "@forge/api";
 import Resolver from "@forge/resolver";
+import { findOwnUim, jira, UIM_NAME } from "./jira";
 import { CHECK_FIELD_NAME, contextKey, type UimData } from "./shared";
-
-const UIM_NAME = "maop-intake-checks";
 
 export interface ProjectOption {
   id: string;
@@ -17,27 +16,6 @@ export interface ProjectOption {
 export interface Context {
   projectId: string;
   issueTypeId: string;
-}
-
-interface UimDetails {
-  id: string;
-  name: string;
-  contexts?: { projectId?: string | null; issueTypeId?: string | null; viewType?: string | null }[];
-}
-
-async function jira(path: ReturnType<typeof route>, init: { method?: string; body?: unknown } = {}) {
-  const response = await api.asApp().requestJira(path, {
-    method: init.method ?? "GET",
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
-    body: init.body === undefined ? undefined : JSON.stringify(init.body),
-  });
-  if (!response.ok) throw new Error(`Jira ${init.method ?? "GET"} ${response.status}: ${await response.text()}`);
-  return response.status === 204 ? null : response.json();
-}
-
-async function findOwnUim(): Promise<UimDetails | undefined> {
-  const page = (await jira(route`/rest/api/3/uiModifications?expand=contexts&maxResults=100`)) as { values: UimDetails[] };
-  return page.values.find((uim) => uim.name === UIM_NAME);
 }
 
 const resolver = new Resolver();
