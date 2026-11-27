@@ -4,6 +4,29 @@ Why things are the way they are. Architecture decisions are presented to the own
 (options, trade-offs, recommendation) and recorded here once the owner has chosen.
 Newest first.
 
+## 2026-11-27: Jira plugin as a Forge app beside the web form
+
+- **Context:** The checks should appear inside Jira, not only in the separate web form.
+- **Options:** Forge app (Jira Cloud); Data Center P2 plugin (Java); Jira Automation calling the
+  Worker (no plugin). Recommended: Forge.
+- **Chosen by the owner:**
+  - Forge app for Jira Cloud in `jira-app/`, on branch `feat/jira-forge-app`; web form and Worker
+    stay as they are. If MAOP runs Jira Data Center, the plugin must be rewritten.
+  - Checks show in the Create dialog (UI modifications). Code checks run live; the AI check runs
+    when the reporter leaves Description. UI modifications cannot block Create, so incomplete
+    tickets can still be created (as in the web form).
+  - After creation, an issue-created trigger re-checks the ticket, adds the `nepopoln` label and
+    a comment with what is missing, and records it in D1 (events can take up to 3 minutes).
+  - Department fields become Jira custom text fields that the owner creates from a list.
+  - Check logic stays in the Worker; the Forge backend calls it with a shared secret header
+    (`X-Intake-Secret`, a Forge encrypted variable).
+  - An admin page in Jira settings chooses the projects and issue types (UI modifications only
+    render for contexts the app registers through the UI modifications REST API).
+  - Spike first: whether the Create-dialog code can call a Forge backend is not documented
+    explicitly; a minimal app proves it before the full build.
+- **Consequences:** the Worker must be reachable from Atlassian (tunnel in development, deploy
+  later, both by the owner); its domain must be listed in `jira-app/manifest.yml`.
+
 ## 2026-11-26: Form, Jira, incomplete tickets and measurement
 
 - **Form:** options were plain HTML+TS in the same Worker (recommended), Vue 3 + Vite in the same
