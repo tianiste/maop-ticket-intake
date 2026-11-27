@@ -7,7 +7,6 @@
     "jsx": "react-jsx",
     "types": ["node"],
     "strict": true,
-    "noEmit": true,
     "skipLibCheck": true
   },
   "include": ["src", "static/uim/src", "static/uim/vite.config.ts"]
