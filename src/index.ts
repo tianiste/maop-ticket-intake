@@ -69,6 +69,7 @@ async function submit(request: Request, env: Env): Promise<Response> {
     firstValid: checks > 0 ? (firstValid ?? null) : result.valid,
     result,
     jiraMode: jira ? "jira" : "demo",
+    source: "form",
   });
 
   if (!jira) {

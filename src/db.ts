@@ -8,18 +8,20 @@ const fromDb = (value: number | null) => (value === null ? null : value === 1);
 
 export interface NewSubmission {
   ticket: Ticket;
-  checks: number;
+  /** null: unknown (tickets from the Jira app), never 0. */
+  checks: number | null;
   firstValid: boolean | null;
   result: ValidationResult;
   jiraMode: "jira" | "demo";
+  source: "form" | "jira";
 }
 
 export async function insertSubmission(db: D1Database, s: NewSubmission): Promise<number> {
   const row = await db
     .prepare(
       `INSERT INTO submissions
-        (created_at, department, summary, fields_json, checks, first_valid, final_valid, missing_json, ai_model, jira_mode)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
+        (created_at, department, summary, fields_json, checks, first_valid, final_valid, missing_json, ai_model, jira_mode, source)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id`,
     )
     .bind(
       new Date().toISOString(),
@@ -32,6 +34,7 @@ export async function insertSubmission(db: D1Database, s: NewSubmission): Promis
       JSON.stringify(s.result.missing),
       s.result.ai.model,
       s.jiraMode,
+      s.source,
     )
     .first<{ id: number }>();
   if (!row) throw new Error("insert returned no id");
@@ -40,6 +43,10 @@ export async function insertSubmission(db: D1Database, s: NewSubmission): Promis
 
 export async function setJiraKey(db: D1Database, id: number, key: string): Promise<void> {
   await db.prepare("UPDATE submissions SET jira_key = ? WHERE id = ?").bind(key, id).run();
+}
+
+export async function hasJiraKey(db: D1Database, key: string): Promise<boolean> {
+  return (await db.prepare("SELECT 1 FROM submissions WHERE jira_key = ?").bind(key).first()) !== null;
 }
 
 export async function deleteSubmission(db: D1Database, id: number): Promise<void> {
@@ -70,7 +77,7 @@ interface Row {
   created_at: string;
   department: Department;
   summary: string;
-  checks: number;
+  checks: number | null;
   first_valid: number | null;
   final_valid: number | null;
   missing_json: string;
@@ -78,6 +85,7 @@ interface Row {
   jira_key: string | null;
   jira_created_at: string | null;
   jira_resolved_at: string | null;
+  source: "form" | "jira";
 }
 
 export interface VerdictCounts {
@@ -90,7 +98,10 @@ export interface GroupStats {
   submissions: number;
   firstCheck: VerdictCounts;
   final: VerdictCounts;
+  /** Web-form tickets only: Jira-app tickets have no known check count or first check. */
   averageChecks: number | null;
+  /** Tickets created in Jira through the Forge app. */
+  fromJiraApp: number;
   /** Only Jira tickets that are resolved; demo tickets have no handling time. */
   handling: { resolved: number; unresolved: number; demo: number; medianHours: number | null; averageHours: number | null };
 }
@@ -114,11 +125,13 @@ function groupStats(rows: Row[]): GroupStats {
   const hours = rows
     .filter((r) => r.jira_resolved_at && r.jira_created_at)
     .map((r) => (Date.parse(r.jira_resolved_at!) - Date.parse(r.jira_created_at!)) / 3_600_000);
+  const counted = rows.filter((r) => r.checks !== null);
   return {
     submissions: rows.length,
-    firstCheck: count(rows.map((r) => fromDb(r.first_valid))),
+    firstCheck: count(counted.map((r) => fromDb(r.first_valid))),
     final: count(rows.map((r) => fromDb(r.final_valid))),
-    averageChecks: rows.length ? rows.reduce((sum, r) => sum + r.checks, 0) / rows.length : null,
+    averageChecks: counted.length ? counted.reduce((sum, r) => sum + r.checks!, 0) / counted.length : null,
+    fromJiraApp: rows.filter((r) => r.source === "jira").length,
     handling: {
       resolved: hours.length,
       unresolved: rows.filter((r) => r.jira_mode === "jira" && !r.jira_resolved_at).length,
@@ -133,7 +146,7 @@ export async function stats(db: D1Database) {
   const { results } = await db
     .prepare(
       `SELECT id, created_at, department, summary, checks, first_valid, final_valid, missing_json,
-              jira_mode, jira_key, jira_created_at, jira_resolved_at
+              jira_mode, jira_key, jira_created_at, jira_resolved_at, source
        FROM submissions ORDER BY id DESC`,
     )
     .all<Row>();
@@ -154,6 +167,7 @@ export async function stats(db: D1Database) {
       jiraMode: r.jira_mode,
       jiraKey: r.jira_key,
       resolvedAt: r.jira_resolved_at,
+      source: r.source,
     })),
   };
 }
