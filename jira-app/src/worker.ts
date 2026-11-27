@@ -1,8 +1,7 @@
 // Calls to the intake Worker. WORKER_URL and WORKER_SECRET are Forge environment variables
 // (forge variables set); the secret is sent only in the X-Intake-Secret header.
 import { fetch } from "@forge/api";
-
-export type WorkerResult<T> = { ok: true; data: T } | { ok: false; error: string };
+import type { WorkerResult } from "./shared";
 
 export async function callWorker<T>(path: string, init: { method?: string; body?: unknown } = {}): Promise<WorkerResult<T>> {
   const base = process.env.WORKER_URL;

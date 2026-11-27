@@ -8,7 +8,7 @@ const keyOf = (c: Context) => `${c.projectId}:${c.issueTypeId}`;
 function App() {
   const [projects, setProjects] = useState<ProjectOption[] | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
+  const [message, setMessage] = useState<{ appearance: "success" | "warning" | "error"; text: string } | null>(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ function App() {
         setProjects(list);
         setSelected(new Set(contexts.map(keyOf)));
       })
-      .catch((error: unknown) => setMessage({ ok: false, text: `Nalaganje ni uspelo: ${String(error)}` }));
+      .catch((error: unknown) => setMessage({ appearance: "error", text: `Nalaganje ni uspelo: ${String(error)}` }));
   }, []);
 
   const toggle = (key: string) =>
@@ -36,10 +36,21 @@ function App() {
       return { projectId, issueTypeId };
     });
     try {
-      const result = await call<{ saved: number }>("saveContexts", { contexts });
-      setMessage({ ok: true, text: `Shranjeno: preverjanje je vklopljeno za ${result.saved} kombinacij.` });
+      const result = await call<{ saved: number; withoutCheckField: string[] }>("saveContexts", { contexts });
+      const names = result.withoutCheckField.map((key) => {
+        const [projectId, issueTypeId] = key.split(":");
+        const project = projects?.find((p) => p.id === projectId);
+        return `${project?.key ?? projectId} / ${project?.issueTypes.find((t) => t.id === issueTypeId)?.name ?? issueTypeId}`;
+      });
+      setMessage({
+        appearance: names.length === 0 ? "success" : "warning",
+        text:
+          `Shranjeno: preverjanje je vklopljeno za ${result.saved} kombinacij.` +
+          (names.length ? ` Brez polja »Preverjanje« (rezultat se ne bo prikazal): ${names.join(", ")}.` : "") +
+          " Po dodajanju ali preimenovanju polj ponovno pritisnite Shrani.",
+      });
     } catch (error) {
-      setMessage({ ok: false, text: `Shranjevanje ni uspelo: ${String(error)}` });
+      setMessage({ appearance: "error", text: `Shranjevanje ni uspelo: ${String(error)}` });
     } finally {
       setSaving(false);
     }
@@ -50,7 +61,7 @@ function App() {
       <Heading size="medium">Preverjanje zahtevkov</Heading>
       <Text>Izberite projekte in vrste zahtevkov, pri katerih okno Ustvari preverja popolnost zahtevka.</Text>
       {message && (
-        <SectionMessage appearance={message.ok ? "success" : "error"}>
+        <SectionMessage appearance={message.appearance}>
           <Text>{message.text}</Text>
         </SectionMessage>
       )}
