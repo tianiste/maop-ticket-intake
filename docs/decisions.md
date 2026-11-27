@@ -24,6 +24,11 @@ Newest first.
     render for contexts the app registers through the UI modifications REST API).
   - Spike first: whether the Create-dialog code can call a Forge backend is not documented
     explicitly; a minimal app proves it before the full build.
+  - Spike result (FINDINGS.md 2026-11-27): the Create dialog reaches the Forge backend, but field
+    help text shows only behind an ⓘ icon. **Chosen by the owner:** a read-only paragraph field
+    `Preverjanje` that the app fills with the result and questions (visible in the dialog and
+    saved on the ticket); each field's ⓘ still carries its own question. Field list:
+    docs/jira-fields.md.
 - **Consequences:** the Worker must be reachable from Atlassian (tunnel in development, deploy
   later, both by the owner); its domain must be listed in `jira-app/manifest.yml`.
 
