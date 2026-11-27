@@ -28,6 +28,8 @@ export interface RuleField {
   label: string;
   required: boolean;
   question: string;
+  /** Long text: leaving it runs the AI check. */
+  multiline: boolean;
 }
 
 export interface JiraRules {

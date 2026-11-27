@@ -31,7 +31,7 @@ function rulesForJira(env: Env) {
       {
         label: dept.label,
         projectKey: keys[id as Department],
-        fields: dept.fields.map(({ id, label, required, question }) => ({ id, label, required, question })),
+        fields: dept.fields.map(({ id, label, required, question, multiline }) => ({ id, label, required, question, multiline: !!multiline })),
       },
     ]),
   );
