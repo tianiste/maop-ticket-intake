@@ -15,6 +15,8 @@ export function formatShare(part: number, known: number): string {
 
 export function formatHours(hours: number | null): string {
   if (hours === null) return UNKNOWN;
+  if (hours < 1 / 60) return "manj kot 1 min";
+  if (hours < 1) return `${Math.round(hours * 60)} min`;
   if (hours < 48) return `${number.format(hours)} h`;
   return `${number.format(hours / 24)} dni`;
 }

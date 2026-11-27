@@ -98,7 +98,7 @@ function groups(d: StatsResponse): [string, GroupStats][] {
           <template v-if="data.jira === 'demo'">
             Jira še ni povezana, zato časa obravnave ni ({{ data.total.handling.demo }} demo zahtevkov).
           </template>
-          <template v-else>{{ data.total.handling.unresolved }} zahtevkov v Jiri še ni rešenih.</template>
+          <template v-else>Nerešenih v Jiri: {{ data.total.handling.unresolved }}.</template>
         </p>
       </template>
 
