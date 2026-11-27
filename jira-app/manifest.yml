@@ -37,4 +37,4 @@ permissions:
 app:
   runtime:
     name: nodejs24.x
-  id: ari:cloud:ecosystem::app/replace-with-forge-register
+  id: ari:cloud:ecosystem::app/93f41063-4ce7-48dc-ac53-6660cf0214ae
