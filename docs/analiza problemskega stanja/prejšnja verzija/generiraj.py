@@ -33,8 +33,6 @@ o=[f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" h
  '<defs><marker id="ar" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#222"/></marker></defs>',
  f'<rect width="{W}" height="{H}" fill="#fff"/>',
  f'<text x="{W/2}" y="40" text-anchor="middle" font-size="24" font-weight="bold">Analiza problemskega stanja: obravnava zahtevkov v podjetju MAOP</text>']
-for x,lab in [((X[0]+X[1])/2,'vzroki vzrokov'),(X[2],'vzroki'),(X[3],'izhodiščni problem'),(X[4],'posledice'),((X[5]+X[6])/2,'posledice posledic')]:
-    o.append(f'<text x="{x}" y="82" text-anchor="middle" font-size="17" fill="#1d5fa8" font-weight="bold">{lab}</text>')
 def c(k): col,y,_=N[k]; return X[col],y
 for a,b in E:
     (x1,y1),(x2,y2)=c(a),c(b); d=math.hypot(x2-x1,y2-y1); ux,uy=(x2-x1)/d,(y2-y1)/d
@@ -45,6 +43,5 @@ for k,(col,y,lines) in N.items():
     y0=y-(len(lines)-1)*9.5+5
     for i,l in enumerate(lines):
         o.append(f'<text x="{x}" y="{y0+i*19:.1f}" text-anchor="middle"{" font-weight=\"bold\"" if centre else ""}>{l}</text>')
-o.append(f'<text x="{W/2}" y="{H-20}" text-anchor="middle" font-size="14" fill="#555">Vir: predstavitev teme (problem, potek in cilji). Posledice posledic so ocena avtorjev; potrdimo z naročnikom.</text>')
 o.append('</svg>')
 open(sys.argv[1],'w').write('\n'.join(o))
