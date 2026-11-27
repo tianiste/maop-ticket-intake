@@ -17,6 +17,9 @@ limitation when it is found; remove it when it is fixed.
 | Jira app: Create can't be blocked | Incomplete tickets can still be created from the Jira dialog | UI modifications have no submit hook | 2026-11-27 |
 | Jira app: field help text hidden | Per-field questions show only behind the ⓘ icon; the full list is in the `Preverjanje` field | Jira's Create dialog layout | 2026-11-27 |
 | Jira app: fields found by name | Renaming a field or adding one needs **Shrani** on the admin page again; until then it is reported as missing | Field ids must be registered before the dialog code runs | 2026-11-27 |
-| Jira app: AI check only on leaving Description | Edits to other fields after that show code checks only, until Description is left again | Owner's choice, limits Gemini calls | 2026-11-27 |
+| Jira app: AI check runs only on leaving a long text field | Short fields (e.g. Program in verzija) are judged by the AI only at the next long-field exit; earlier AI findings stay shown until then | Limits Gemini calls | 2026-11-27 |
 | Jira app: Jira Cloud only | A Data Center Jira would need a rewrite | Forge runs only on Cloud | 2026-11-27 |
-| Jira app: no re-check after create yet | Label `nepopoln`, comment and D1 stats are not written for tickets from the Jira dialog | Next increment (issue-created trigger) | 2026-11-27 |
+| Jira app: re-check after create is delayed | Label, comment and final `Preverjanje` text appear up to ~3 minutes after Create | Jira delivers app events asynchronously | 2026-11-27 |
+| Jira app: no check count for Jira tickets | Stats show "ni podatka" for first check and leave them out of the average number of checks | The dialog cannot pass its counts to the created ticket | 2026-11-27 |
+| Jira app: `Preverjanje` editable on the ticket | Anyone can change the stored text after Create (read-only only in the Create dialog) | UI modification registered for Create only | 2026-11-27 |
+| Jira app: Worker reached through a temporary tunnel | Tunnel URL changes on every restart; app needs `WORKER_URL` + deploy again | Real Worker deploy is the owner's step | 2026-11-27 |
