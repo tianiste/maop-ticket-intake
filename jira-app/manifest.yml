@@ -32,8 +32,8 @@ permissions:
   external:
     fetch:
       backend:
-        - "*.trycloudflare.com"
-        - "*.workers.dev"
+        - address: "*.trycloudflare.com"
+        - address: "*.workers.dev"
 app:
   runtime:
     name: nodejs24.x
